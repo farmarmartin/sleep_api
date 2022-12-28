@@ -47,7 +47,7 @@ function whenToWakeUp($countOfCyclesWanted = 5){
 }
 
 
-function whenToSleep($h, $m, $countOfCyclesWanted){
+function whenToSleep($h, $m, $countOfCyclesWanted, $date = null){
     if ($h > 23 || $m > 59){
         echo "wrong format, max is 23 for hours and 59 for minutes. ";
     }else{
@@ -58,18 +58,29 @@ function whenToSleep($h, $m, $countOfCyclesWanted){
 
         $ext = explode(".", $gosleep_time);
         $min = minuteFormat($ext[0], $gosleep_time); 
-        
+        $hhour = $ext[0];
 
-        if ($ext[0] < 0){
-            $ext[0] = 24 + $gosleep_time;
-        }
+
         if ($min < 0){
+            $hhour -= 1;
             $min = 60 + $min;
         }
 
+        if ($hhour < 0){
+            $hhour = 24 + $gosleep_time;
+        }
 
-        $hhour = floor($ext[0]);
-        $result = ["hour" => "$hhour", "min" => "$min"];
+
+        $hour = floor($hhour);
+
+        if ($date == null){
+            $result = ["hour" => "$hour", "min" => "$min"];
+
+        }
+        elseif($date != null){
+            $result = ["hour" => "$hour", "min" => "$min", "date" => "$date"];
+        }
+        
         return $result;
     }
 }
