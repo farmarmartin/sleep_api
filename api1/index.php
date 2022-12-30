@@ -12,11 +12,15 @@ if(empty($operation)){
 }
 
 
-elseif($operation == 'wake'){
+if($operation == 'wake'){
     reply(whenToWakeUp($parameters[0]));
 }
 
 
-elseif($operation == 'sleep'){
+if($operation == 'sleep'){
     reply(whenToSleep($parameters[0], $parameters[1], $parameters[2]));
+}
+
+if($operation == 'plannedSleep'){
+    reply(whenToWakeUpBasedOnTime($parameters[0], $parameters[1], $parameters[2]));
 }

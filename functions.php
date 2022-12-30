@@ -28,24 +28,20 @@ function whenToWakeUp($countOfCyclesWanted = 5){
 
     $hour = $extractTime[0];
 
-    $minutes = $wakeAt - $hour;
+    $minutes = minuteFormat($hour, $wakeAt);
 
     if ($hour > 23){
             $hour = $hour % 24;
     }
 
     if ($minutes > 59){
-
         $hour+=1;
         $minutes = $minutes % 60;
      }
 
-    $legitMinutes = round($minutes * 60);
-    $result = array("hour" => "$hour", "min" => "$legitMinutes");
-
-   return $result;
+    $result = array("hour" => "$hour", "min" => "$minutes");
+    return $result;
 }
-
 
 function whenToSleep($h, $m, $countOfCyclesWanted, $date = null){
     if ($h > 23 || $m > 59){
@@ -55,24 +51,20 @@ function whenToSleep($h, $m, $countOfCyclesWanted, $date = null){
         $wakeup_time = $h + $m / 60;
         $gosleep_time = $wakeup_time - $entire_sleep_time;
 
-
-        $ext = explode(".", $gosleep_time);
-        $min = minuteFormat($ext[0], $gosleep_time); 
-        $hhour = $ext[0];
-
+        $extractTime= explode(".", $gosleep_time);
+        $min = minuteFormat($extractTime[0], $gosleep_time); 
+        $hours = $extractTime[0];
 
         if ($min < 0){
-            $hhour -= 1;
+            $hours -= 1;
             $min = 60 + $min;
         }
 
-        if ($hhour < 0){
-            $hhour = 24 + $gosleep_time;
+        if ($hours < 0){
+            $hours = 24 + $gosleep_time;
         }
 
-
-        $hour = floor($hhour);
-
+        $hour = floor($hours);
         if ($date == null){
             $result = ["hour" => "$hour", "min" => "$min"];
 
@@ -82,5 +74,37 @@ function whenToSleep($h, $m, $countOfCyclesWanted, $date = null){
         }
         
         return $result;
+    }
+}
+
+function whenToWakeUpBasedOnTime($h, $m, $countOfCyclesWanted, $date = null){
+    if ($h > 23 || $m > 59){
+        echo "wrong format, max is 23 for hours and 59 for minutes. ";
+    }else{
+        $entire_sleep_time = 1.5 * $countOfCyclesWanted;
+        $planned_sleep = $h + $m / 60;
+        $wakeAt = $planned_sleep + $entire_sleep_time;
+
+        $extractTime = explode(".", $wakeAt);
+        $hours = floor($extractTime[0]);
+        $minutes = minuteFormat($hours, $wakeAt);
+
+        if ($hours > 23){
+            $hours = $hours -24;
+        }
+        if ($minutes > 59){
+            $minutes = $minutes - 60;
+        }
+
+
+        if ($date == null){
+            $result = ["hour" => "$hours", "min" => "$minutes"];
+
+        }
+        elseif($date != null){
+            $result = ["hour" => "$hours", "min" => "$minutes", "date" => "$date"];
+        }
+
+        reply($result);
     }
 }

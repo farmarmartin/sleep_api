@@ -12,3 +12,7 @@ if ($parameters[3] == 'wake'){
 if ($parameters[3] == 'sleep'){
     reply(whenToSleep($parameters[4], $parameters[5], $parameters[6]));
 }
+
+if ($parameters[3] == 'plannedSleep'){
+    reply(whenToWakeUpBasedOnTime($parameters[4], $parameters[5], $parameters[6]));
+}

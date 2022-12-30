@@ -8,7 +8,7 @@
 </head>
 <body>
     <form method="POST">
-        <textarea name="input" id="input" cols="50" rows="3"></textarea>
+        <textarea name="input" id="input" cols="50" rows="3" placeholder='example: {"hours":"6","min":"20","cycles":"5"}'></textarea>
         <input type="submit" value="submit">
     </form>
 
@@ -30,10 +30,13 @@
       
 
         if ($operation == 'wake'){
-            echo json_encode(whenToWakeUp($cycles));
+            reply(whenToWakeUp($cycles));
         }
-        if($operation == 'sleep'){
-            echo json_encode(whenToSleep($hours, $minutes, $cycles, $date));
+        if ($operation == 'sleep'){
+            reply(whenToSleep($hours, $minutes, $cycles, $date));
+        }
+        if ($operation == 'plannedSleep'){
+            reply(whenToWakeUpBasedOnTime($hours, $minutes, $cycles, $date));
         }
 
 
